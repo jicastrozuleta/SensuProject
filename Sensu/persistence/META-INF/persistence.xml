@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+             version="1.0">
+             
+  <!-- default -->
+    <persistence-unit name="default">
+    	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    	<non-jta-data-source>java://comp/env/jdbc/SensuDS</non-jta-data-source>
+    	<class>org.openxava.session.GalleryImage</class>
+    	<class>org.openxava.web.editors.DiscussionComment</class>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.connection.release_mode" value="after_transaction"/>
+        </properties>
+    </persistence-unit>
+    
+    <!-- SQLSERVER -->
+    <persistence-unit name="sqlserver">
+    	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    	<class>org.openxava.web.editors.DiscussionComment</class>
+        <properties>
+			<property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+			<property name="hibernate.connection.release_mode" value="after_transaction"/>
+			<property name="hibernate.connection.url" value="jdbc:sqlserver://127.0.0.1:1433;DatabaseName=SensuDB"/>
+			<property name="hibernate.connection.user" value="db.jicz"/>
+            <property name="hibernate.connection.password" value="123456"/>
+        </properties>
+    </persistence-unit>    
+        
+</persistence>
