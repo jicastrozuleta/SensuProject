@@ -6,10 +6,13 @@ import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
+import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.Depends;
 import org.openxava.annotations.DescriptionsList;
 import org.openxava.annotations.ReferenceView;
 import org.openxava.annotations.Stereotype;
+
+import com.sensu.calculadores.CalcularPorcentajeIva;
 
 @Embeddable
 public class DetalleCotizacion {
@@ -27,7 +30,8 @@ public class DetalleCotizacion {
 	@Stereotype("DINERO")
 	private BigDecimal precioUnitario;
 	
-	private int IVA;
+	@DefaultValueCalculator(CalcularPorcentajeIva.class)
+	private BigDecimal IVA;
 
 	public Producto getProducto() {
 		return producto;
@@ -60,6 +64,17 @@ public class DetalleCotizacion {
 	public void setPrecioUnitario(BigDecimal precioUnitario) {
 		this.precioUnitario = precioUnitario;
 	}
+	
+
+	public BigDecimal getIVA() {
+		return IVA;
+	}
+
+	public void setIVA(BigDecimal iVA) {
+		IVA = iVA;
+	}
+	
+	
 
 	/**
 	 * permite calcular el total de la linea actual de detalle.
@@ -68,7 +83,14 @@ public class DetalleCotizacion {
 	 */
 	@Depends("producto.codigo, precioUnitario, cantidad")
 	@Stereotype("DINERO")
-	public BigDecimal getTotal() {
+	public BigDecimal getBase() {
 		return new BigDecimal(getCantidad()).multiply(getPrecioUnitario());
+	}
+	
+	
+	@Depends("producto.codigo,cantidad, precioUnitario, IVA")
+	@Stereotype("DINERO")
+	public BigDecimal getTotal() {
+		return new BigDecimal(getCantidad()).multiply(getPrecioUnitario()).multiply(getIVA().divide(new BigDecimal(100)).add(new BigDecimal(1)));
 	}
 }

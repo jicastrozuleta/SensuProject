@@ -1,5 +1,6 @@
 package com.sensu.model;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
@@ -57,7 +58,8 @@ public class Cotizacion extends Identifiable {
 	
 	
 	@ElementCollection
-	@ListProperties("producto.codigo, producto.descripcion, marca,cantidad, precioUnitario, total")
+	@ListProperties("producto.codigo, producto.descripcion, marca,cantidad, precioUnitario, base, IVA,"
+			+ "total[cotizacion.importeBase, cotizacion.totalIva, cotizacion.totalCotizacion]")
 	private Collection<DetalleCotizacion> detalles;
 	
 	@Length(max = 255)
@@ -102,5 +104,42 @@ public class Cotizacion extends Identifiable {
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+	
+	
+	/**
+	 * calcular el subtotal de la cotizacion
+	 * @return
+	 */
+	public BigDecimal getImporteBase() {
+		BigDecimal resultado = new BigDecimal("0.00");
+		for (DetalleCotizacion detalle : getDetalles()) {
+			// Iteramos por todas las líneas de detalle
+			resultado = resultado.add(detalle.getBase());
+			// Acumulamos el importe
+		}
+		return resultado;
+	}
+	
+	/**
+	 * calcular el valor del iva de la cotizacion
+	 * @return
+	 */
+	public BigDecimal getTotalIva() {
+		BigDecimal resultado = new BigDecimal("0.00");
+		for (DetalleCotizacion detalle : getDetalles()) {
+			// Iteramos por todas las líneas de detalle
+			resultado = resultado.add(detalle.getBase().multiply(detalle.getIVA().divide(new BigDecimal(100))));
+			// Acumulamos el importe
+		}
+		return resultado;
+	}
+	
+	/**
+	 * calcular el total de la cotizacion
+	 * @return
+	 */
+	public BigDecimal getTotalCotizacion() {
+		return getImporteBase().add(getTotalIva());
 	}
 }

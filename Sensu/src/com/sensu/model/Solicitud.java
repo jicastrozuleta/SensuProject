@@ -57,7 +57,7 @@ public class Solicitud extends Identifiable {
 
 	@OneToMany(mappedBy = "solicitud")
 	@ElementCollection
-	@ListProperties("fecha, proveedor.nit, proveedor.razonSocial")
+	@ListProperties("fecha, proveedor.nit, proveedor.razonSocial, totalCotizacion")
 	/**
 	 * cotizaciones recibidas para la solicitud actual.
 	 */

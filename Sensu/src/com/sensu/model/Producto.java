@@ -3,6 +3,7 @@ package com.sensu.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
@@ -14,7 +15,6 @@ import org.openxava.annotations.Required;
 import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
-import org.openxava.model.Identifiable;
 
 import com.sensu.calculadores.CalcularCodigo;
 @Views({
@@ -33,7 +33,7 @@ import com.sensu.calculadores.CalcularCodigo;
 })
 
 @Entity
-public class Producto extends Identifiable {
+public class Producto {
 	
 	/**
 	 * Constante para definir el valor inicial por el cual se va a generar el codigo
@@ -41,9 +41,9 @@ public class Producto extends Identifiable {
 	 */
 	private static final int INIT_VALUE = 1000;
 	
+	@Id
+	@Hidden	
 	@Column(length = 4)
-	@ReadOnly
-	@Hidden
 	private int codigo;
 
 	@Column(length = 50)
