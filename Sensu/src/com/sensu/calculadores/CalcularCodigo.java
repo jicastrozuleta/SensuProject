@@ -31,7 +31,7 @@ public class CalcularCodigo {
 	private String campo;
 
 	/**
-	 * constructor.
+	 * constructor. default
 	 * 
 	 * @param tabla
 	 * @param campo
